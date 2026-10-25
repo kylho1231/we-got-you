@@ -12,6 +12,7 @@ import { RequestQuoteModal } from "@/components/booking/RequestQuoteModal";
 export default function MapPage() {
   const store = DataStore.getInstance();
   const allProviders = useMemo(() => store.getProviders().filter((p) => p.isPublished), [store]);
+  const allLeads = useMemo(() => store.getLeads().filter((l) => l.hasResolvedCoordinates), [store]);
 
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
@@ -21,6 +22,11 @@ export default function MapPage() {
     if (selectedCategory === "ALL") return allProviders;
     return allProviders.filter((p) => p.category === selectedCategory);
   }, [allProviders, selectedCategory]);
+
+  const filteredLeads = useMemo(() => {
+    if (selectedCategory === "ALL") return allLeads;
+    return allLeads.filter((l) => l.category === selectedCategory);
+  }, [allLeads, selectedCategory]);
 
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)] bg-slate-50 dark:bg-midnight">
@@ -65,9 +71,11 @@ export default function MapPage() {
       <div className="flex-1 relative">
         <MapLibreMap
           providers={filteredProviders}
+          leads={filteredLeads}
           selectedProvider={selectedProvider}
           onSelectProvider={(p) => setSelectedProvider(p)}
           className="w-full h-full rounded-none border-none shadow-none"
+          showLeadsToggle={true}
         />
       </div>
 

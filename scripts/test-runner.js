@@ -106,20 +106,30 @@ test("Roadside matching filters only providers who have active dispatch and road
   assert.strictEqual(matched[0].id, "1");
 });
 
-// 5. ANTIQUE RESEARCH DATASET INTEGRITY TEST
-test("Researched Antique providers dataset contains 34 shops with San Jose locations", () => {
+// 5. ANTIQUE RESEARCH DATASET & GPS RESOLUTION INTEGRITY TEST
+test("Researched Antique providers dataset contains 48 shops with 25 resolved GPS and 23 storefront candidates", () => {
   const leads = require("../data/antique_provider_leads.json");
-  assert.strictEqual(leads.length, 34, `Expected 34 leads, got ${leads.length}`);
+  assert.strictEqual(leads.length, 48, `Expected 48 leads, got ${leads.length}`);
+
+  const withGps = leads.filter((l) => l.hasResolvedCoordinates);
+  const withoutGps = leads.filter((l) => !l.hasResolvedCoordinates);
+
+  assert.strictEqual(withGps.length, 25, `Expected 25 leads with resolved GPS, got ${withGps.length}`);
+  assert.strictEqual(withoutGps.length, 23, `Expected 23 leads needing storefront coordinates, got ${withoutGps.length}`);
 
   const hasEDE = leads.some((l) => l.name.includes("EDE Engineering"));
-  const hasRapide = leads.some((l) => l.name.includes("Rapidé"));
+  const hasRapide = leads.some((l) => l.name.includes("Rapidé") || l.name.includes("Rapid"));
   const hasCellu = leads.some((l) => l.name.includes("Cellu-Zite"));
   const hasARS = leads.some((l) => l.name.includes("ARS Welding"));
+  const hasCircleCompubiz = leads.some((l) => l.name.includes("Circle Compubiz"));
+  const hasJasmine = leads.some((l) => l.name.includes("Jasmine"));
 
-  assert(hasEDE, "Should contain EDE Engineering");
-  assert(hasRapide, "Should contain Rapidé San Jose");
-  assert(hasCellu, "Should contain Cellu-Zite");
-  assert(hasARS, "Should contain ARS Welding");
+  assert(hasEDE, "Should contain EDE Engineering (R001)");
+  assert(hasRapide, "Should contain Rapidé San Jose (R016)");
+  assert(hasCellu, "Should contain Cellu-Zite (R007/R008)");
+  assert(hasARS, "Should contain ARS Welding (R023)");
+  assert(hasCircleCompubiz, "Should contain Circle Compubiz Antique (N001)");
+  assert(hasJasmine, "Should contain Jasmine's Electronic Gadgets (N002)");
 });
 
 // 6. EMERGENCY 911 HAZARD DETECTION

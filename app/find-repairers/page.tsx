@@ -30,6 +30,7 @@ function FindRepairersContent() {
 
   const store = DataStore.getInstance();
   const allProviders = useMemo(() => store.getProviders().filter((p) => p.isPublished), [store]);
+  const allLeads = useMemo(() => store.getLeads().filter((l) => l.hasResolvedCoordinates), [store]);
 
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
@@ -265,6 +266,7 @@ function FindRepairersContent() {
           <div className="space-y-4">
             <MapLibreMap
               providers={filteredProviders}
+              leads={allLeads}
               className="w-full h-[650px]"
             />
           </div>
@@ -284,6 +286,7 @@ function FindRepairersContent() {
             <div className="lg:col-span-6 sticky top-20">
               <MapLibreMap
                 providers={filteredProviders}
+                leads={allLeads}
                 className="w-full h-[720px]"
               />
             </div>

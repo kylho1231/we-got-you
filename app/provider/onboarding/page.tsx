@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Store,
   ShieldCheck,
@@ -13,16 +13,21 @@ import {
   Clock,
   Wrench,
   FileText,
+  MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { SERVICE_CATEGORIES, SAN_JOSE_BARANGAYS } from "@/data/seed_data";
 import { DataStore } from "@/lib/store";
-import { ServiceMode } from "@/types";
+import { ServiceMode, ProviderLead } from "@/types";
 import { slugify } from "@/lib/utils";
 
-export default function ProviderOnboardingPage() {
+function ProviderOnboardingContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const store = DataStore.getInstance();
+
+  const claimLeadId = searchParams.get("claimLead");
+  const [claimedLead, setClaimedLead] = useState<ProviderLead | null>(null);
 
   const [businessName, setBusinessName] = useState("");
   const [businessType, setBusinessType] = useState<any>("REGISTERED_SHOP");
@@ -37,6 +42,21 @@ export default function ProviderOnboardingPage() {
   const [serviceModes, setServiceModes] = useState<ServiceMode[]>(["SHOP_VISIT"]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (claimLeadId) {
+      const lead = store.getLeads().find((l) => l.id === claimLeadId);
+      if (lead) {
+        setClaimedLead(lead);
+        setBusinessName(lead.name);
+        setCategory(lead.category);
+        if (lead.phone) setContactPhone(lead.phone.split(";")[0].trim());
+        setStreetAddress(lead.location);
+        if (lead.barangay) setBarangay(lead.barangay);
+        if (lead.services) setSpecialtiesText(lead.services);
+      }
+    }
+  }, [claimLeadId, store]);
 
   const toggleMode = (mode: ServiceMode) => {
     if (serviceModes.includes(mode)) {
@@ -73,14 +93,20 @@ export default function ProviderOnboardingPage() {
         streetAddress,
         barangay,
         municipality: "San Jose de Buenavista",
-        coordinates: { lat: 10.7441, lng: 121.9402 },
+        coordinates: claimedLead?.coordinates || { lat: 10.7441, lng: 121.9402 },
+        plusCode: claimedLead?.plusCode,
+        mapPrecision: claimedLead?.mapPrecision,
+        googleMapsPinUrl: claimedLead?.googleMapsPinUrl,
+        sourceLeadId: claimedLead?.id,
         verificationStatus: "PENDING_VERIFICATION",
         verificationDetails: {
           hasVerifiedIdentity: true,
           hasVerifiedContact: true,
           hasVerifiedBusinessPermit: false,
           hasVerifiedCredentials: false,
-          reviewerNotes: "Self-registered via provider onboarding. Awaiting administrative credential verification.",
+          reviewerNotes: claimedLead
+            ? `Claimed directory listing ${claimedLead.id} (${claimedLead.sourceType}). Pending owner verification.`
+            : "Self-registered via provider onboarding. Awaiting administrative credential verification.",
         },
         serviceModes,
         specialties,
@@ -110,6 +136,16 @@ export default function ProviderOnboardingPage() {
         galleryImages: [],
       });
 
+      if (claimedLead) {
+        store.updateLeadOutreachStatus(claimedLead.id, "Verified partner");
+        const allLeads = store.getLeads();
+        const targetLead = allLeads.find((l) => l.id === claimedLead.id);
+        if (targetLead) {
+          targetLead.isPromotedToProvider = true;
+          store.saveLeads(allLeads);
+        }
+      }
+
       setIsSubmitted(true);
     } catch (err) {
       alert("Failed to register. Please check your data.");
@@ -135,6 +171,19 @@ export default function ProviderOnboardingPage() {
             inquiries without advertising costs.
           </p>
         </div>
+
+        {claimedLead && (
+          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3 text-xs text-amber-900 dark:text-amber-200">
+            <MapPin className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold">Claiming Antique Directory Listing: </span>
+              <span>{claimedLead.name} ({claimedLead.id}) • {claimedLead.location}</span>
+              <p className="text-[11px] text-amber-700 dark:text-amber-300/80 mt-1">
+                Your coordinates ({claimedLead.coordinates ? `${claimedLead.coordinates.lat.toFixed(4)}, ${claimedLead.coordinates.lng.toFixed(4)}` : "Storefront pin pending"}) will be linked to your provider profile upon submission.
+              </p>
+            </div>
+          </div>
+        )}
 
         {isSubmitted ? (
           <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl text-center space-y-4">
@@ -375,5 +424,19 @@ export default function ProviderOnboardingPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ProviderOnboardingPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-50 dark:bg-midnight py-12 text-center text-xs text-slate-400">
+          Loading onboarding portal...
+        </div>
+      }
+    >
+      <ProviderOnboardingContent />
+    </Suspense>
   );
 }

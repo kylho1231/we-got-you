@@ -119,6 +119,9 @@ export interface Provider {
   barangay: string;
   municipality: string;
   coordinates: Coordinates;
+  plusCode?: string;
+  mapPrecision?: string;
+  googleMapsPinUrl?: string;
   verificationStatus: VerificationStatus;
   verificationDetails: ProviderVerification;
   serviceModes: ServiceMode[];
@@ -271,11 +274,21 @@ export interface ProviderLead {
   phone: string;
   sourceType: string;
   evidenceStrength: string;
+  plusCode?: string;
+  gpsDerivation?: string;
+  mapPrecision?: string;
+  providerVerification?: string;
+  coordinateSourceUrl?: string;
+  listingUrl?: string;
+  googleMapsPinUrl?: string;
+  locationCaveats?: string;
+  googleMapsSearchUrl?: string;
+  coordinates: Coordinates | null;
+  hasResolvedCoordinates?: boolean;
   mobileRoadsideDispatch: string;
   outreachStatus: "Not contacted" | "Contacted" | "In discussion" | "Verified partner" | "Declined";
-  referenceUrl: string;
-  verificationNotes: string;
-  coordinates: Coordinates;
+  referenceUrl?: string;
+  verificationNotes?: string;
   isPromotedToProvider: boolean;
 }
 

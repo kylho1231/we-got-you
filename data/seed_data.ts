@@ -201,7 +201,9 @@ export const INITIAL_PROVIDERS: Provider[] = [
     streetAddress: "Villavert-Jimenez Street, Brgy. 6",
     barangay: "Barangay 6 (Poblacion)",
     municipality: "San Jose de Buenavista",
-    coordinates: { lat: 10.7448, lng: 121.9412 },
+    coordinates: { lat: 10.74501, lng: 121.94019 },
+    mapPrecision: "Third-party map pin",
+    googleMapsPinUrl: "https://www.google.com/maps?q=10.7450100,121.9401900",
     verificationStatus: "APPROVED",
     verificationDetails: {
       hasVerifiedIdentity: true,
@@ -239,7 +241,7 @@ export const INITIAL_PROVIDERS: Provider[] = [
       "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1588508065123-287b28e013da?auto=format&fit=crop&w=800&q=80",
     ],
-    sourceLeadId: "lead-07",
+    sourceLeadId: "R007",
     createdAt: "2026-09-10T09:00:00Z",
   },
   {
@@ -293,7 +295,7 @@ export const INITIAL_PROVIDERS: Provider[] = [
       "https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80",
     ],
-    sourceLeadId: "lead-16",
+    sourceLeadId: "R016",
     createdAt: "2026-08-15T07:30:00Z",
   },
   {
@@ -345,7 +347,7 @@ export const INITIAL_PROVIDERS: Provider[] = [
     galleryImages: [
       "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80",
     ],
-    sourceLeadId: "lead-02",
+    sourceLeadId: "R002",
     createdAt: "2026-08-25T11:00:00Z",
   },
   {
@@ -396,7 +398,7 @@ export const INITIAL_PROVIDERS: Provider[] = [
     galleryImages: [
       "https://images.unsplash.com/photo-1578844251758-2f71da64c96f?auto=format&fit=crop&w=800&q=80",
     ],
-    sourceLeadId: "lead-23",
+    sourceLeadId: "R023",
     createdAt: "2026-09-01T08:00:00Z",
   },
   {
@@ -447,7 +449,7 @@ export const INITIAL_PROVIDERS: Provider[] = [
     galleryImages: [
       "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=800&q=80",
     ],
-    sourceLeadId: "lead-11",
+    sourceLeadId: "R011",
     createdAt: "2026-09-12T10:00:00Z",
   },
   {
@@ -497,7 +499,7 @@ export const INITIAL_PROVIDERS: Provider[] = [
     galleryImages: [
       "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=800&q=80",
     ],
-    sourceLeadId: "lead-26",
+    sourceLeadId: "R026",
     createdAt: "2026-08-18T14:00:00Z",
   },
 ];

@@ -52,7 +52,8 @@ export class DataStore {
       localStorage.setItem(STORAGE_KEY_REVIEWS, JSON.stringify(INITIAL_REVIEWS));
     }
 
-    if (!localStorage.getItem(STORAGE_KEY_LEADS)) {
+    const storedLeads = localStorage.getItem(STORAGE_KEY_LEADS);
+    if (!storedLeads || (JSON.parse(storedLeads).length < (RAW_LEADS as any[]).length)) {
       const formattedLeads: ProviderLead[] = (RAW_LEADS as any[]).map((lead) => ({
         ...lead,
         outreachStatus: lead.outreachStatus || "Not contacted",
@@ -555,6 +556,9 @@ export class DataStore {
       barangay: lead.barangay || "San Jose de Buenavista",
       municipality: lead.municipality || "San Jose de Buenavista",
       coordinates: lead.coordinates || { lat: 10.7441, lng: 121.9402 },
+      plusCode: lead.plusCode || undefined,
+      mapPrecision: lead.mapPrecision || undefined,
+      googleMapsPinUrl: lead.googleMapsPinUrl || undefined,
       verificationStatus: "APPROVED",
       verificationDetails: {
         hasVerifiedIdentity: true,
