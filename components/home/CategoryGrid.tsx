@@ -6,96 +6,103 @@ import {
   Smartphone,
   Laptop,
   Refrigerator,
-  Car,
   Bike,
+  Car,
   Wrench,
-  ShieldAlert,
   ArrowRight,
 } from "lucide-react";
-import { SERVICE_CATEGORIES } from "@/data/seed_data";
-import { cn } from "@/lib/utils";
-
-const ICONS: Record<string, React.ElementType> = {
-  Smartphone,
-  Laptop,
-  Refrigerator,
-  Car,
-  Bike,
-  Wrench,
-  ShieldAlert,
-};
 
 export function CategoryGrid() {
+  const categories = [
+    {
+      title: "Mobile Phones & Gadgets",
+      description: "Screen replacement, battery, charging port, and water-damage repair.",
+      icon: Smartphone,
+      categoryQuery: "Mobile Phone & Gadget Repair",
+      colorClass: "bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 border-blue-200 dark:border-blue-900",
+    },
+    {
+      title: "Laptops, PC & Printers",
+      description: "Hardware diagnostics, format/OS install, keyboard, and printer servicing.",
+      icon: Laptop,
+      categoryQuery: "Computer, Laptop & Printer Repair",
+      colorClass: "bg-indigo-50 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-400 border-indigo-200 dark:border-indigo-900",
+    },
+    {
+      title: "Appliances & Aircon",
+      description: "Refrigerators, air conditioning cleaning & repair, washing machines.",
+      icon: Refrigerator,
+      categoryQuery: "Appliance Repair",
+      colorClass: "bg-cyan-50 text-cyan-600 dark:bg-cyan-950/60 dark:text-cyan-400 border-cyan-200 dark:border-cyan-900",
+    },
+    {
+      title: "Motorcycles & Scooters",
+      description: "Emergency vulcanizing, engine tune-up, chains, brakes, and rescue.",
+      icon: Bike,
+      categoryQuery: "Motorcycle Services",
+      colorClass: "bg-amber-50 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 border-amber-200 dark:border-amber-900",
+    },
+    {
+      title: "Car & Auto Services",
+      description: "Battery jump-start, tire change, mechanical troubleshooting, AC repair.",
+      icon: Car,
+      categoryQuery: "Car & Automotive Services",
+      colorClass: "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900",
+    },
+    {
+      title: "Home Plumbing & Electrical",
+      description: "Water leaks, water pumps, electrical troubleshooting, and minor repairs.",
+      icon: Wrench,
+      categoryQuery: "Home Maintenance",
+      colorClass: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700",
+    },
+  ];
+
   return (
-    <section className="py-14 sm:py-20 bg-white dark:bg-midnight transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+    <section className="py-12 sm:py-16 bg-slate-50/50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
-              <span>Comprehensive Local Directory</span>
-            </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              What Problem Needs Solving?
+              Browse by What Needs Repair
             </h2>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              Browse by verified local service categories in San Jose de Buenavista.
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+              Select a category to view verified technicians and shops in San Jose de Buenavista.
             </p>
           </div>
 
           <Link
-            href="/services"
-            className="text-sm font-semibold text-brand-600 hover:text-brand-700 dark:text-cyan-400 flex items-center gap-1.5 group"
+            href="/find-repairers"
+            className="text-xs sm:text-sm font-bold text-brand-600 hover:text-brand-700 dark:text-cyan-400 flex items-center gap-1 group shrink-0"
           >
-            <span>Explore All Categories</span>
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <span>View All 48 Shops</span>
+            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
-        {/* Category Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {SERVICE_CATEGORIES.map((category) => {
-            const Icon = ICONS[category.iconName] || Wrench;
-            const isRoadside = category.slug === "roadside-assistance";
-
+        {/* 6 Category Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {categories.map((cat) => {
+            const Icon = cat.icon;
             return (
               <Link
-                key={category.id}
-                href={`/find-repairers?category=${encodeURIComponent(category.name)}`}
-                className={cn(
-                  "group relative p-6 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 cursor-pointer",
-                  isRoadside
-                    ? "bg-gradient-to-br from-red-500/10 via-rose-500/5 to-transparent border-red-200 dark:border-red-900/60"
-                    : "bg-slate-50/60 hover:bg-white dark:bg-slate-900/50 dark:hover:bg-slate-800/80 border-slate-200/80 dark:border-slate-800"
-                )}
+                key={cat.title}
+                href={`/find-repairers?category=${encodeURIComponent(cat.categoryQuery)}`}
+                className="group p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-500 dark:hover:border-brand-500 shadow-sm hover:shadow-md transition-all duration-200 flex items-start gap-4 cursor-pointer"
               >
-                <div>
-                  <div
-                    className={cn(
-                      "flex h-12 w-12 items-center justify-center rounded-xl mb-4 transition-transform group-hover:scale-110 shadow-sm",
-                      isRoadside
-                        ? "bg-red-600 text-white shadow-red-600/30"
-                        : "bg-white dark:bg-slate-800 text-brand-600 dark:text-cyan-400 border border-slate-200 dark:border-slate-700"
-                    )}
-                  >
-                    <Icon className="h-6 w-6" />
-                  </div>
-
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-cyan-400 transition-colors">
-                    {category.name}
-                  </h3>
-
-                  <p className="mt-2 text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                    {category.description}
-                  </p>
+                <div
+                  className={`p-3 rounded-2xl border shrink-0 transition-transform group-hover:scale-105 ${cat.colorClass}`}
+                >
+                  <Icon className="h-6 w-6" />
                 </div>
 
-                <div className="mt-5 pt-4 border-t border-slate-200/60 dark:border-slate-800 flex items-center justify-between text-xs font-medium">
-                  <span className="text-slate-500 dark:text-slate-400">
-                    {category.subcategories.length} specialties
-                  </span>
-                  <span className="text-brand-600 dark:text-cyan-400 group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-semibold">
-                    Find Help <ArrowRight className="h-3 w-3" />
-                  </span>
+                <div className="space-y-1">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-cyan-400 transition-colors">
+                    {cat.title}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                    {cat.description}
+                  </p>
                 </div>
               </Link>
             );

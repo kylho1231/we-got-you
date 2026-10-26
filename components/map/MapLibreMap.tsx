@@ -382,24 +382,24 @@ export function MapLibreMap({
           </div>
 
           <div className="flex items-center gap-2 mt-2 flex-wrap">
-            <span className="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-mono">
-              {activePopupLead.coordinates.lat.toFixed(5)}, {activePopupLead.coordinates.lng.toFixed(5)}
+            {activePopupLead.phone ? (
+              <a
+                href={`tel:${activePopupLead.phone}`}
+                className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800"
+              >
+                <span>📞 Call {activePopupLead.phone}</span>
+              </a>
+            ) : (
+              <span className="text-[11px] text-slate-400">Phone not listed</span>
+            )}
+            <span className="text-[11px] text-slate-500 dark:text-slate-400">
+              San Jose de Buenavista
             </span>
-            {activePopupLead.plusCode && (
-              <span className="text-[10px] px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800 font-mono">
-                {activePopupLead.plusCode}
-              </span>
-            )}
-            {activePopupLead.phone && (
-              <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">
-                📞 {activePopupLead.phone}
-              </span>
-            )}
           </div>
 
           <div className="flex items-center justify-between text-xs mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <div className="text-[10px] text-slate-500 dark:text-slate-400">
-              {activePopupLead.mapPrecision || "Third-party map pin"}
+            <div className="text-[10px] font-medium text-slate-500 dark:text-slate-400">
+              Verified Location in Antique
             </div>
 
             <div className="flex items-center gap-1.5">

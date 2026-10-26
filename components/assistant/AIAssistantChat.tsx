@@ -152,7 +152,13 @@ export function AIAssistantChat() {
                             <p className="text-[11px] text-slate-500 dark:text-slate-400">
                               {rec.reason}
                             </p>
-                            <div className="pt-1 flex justify-end">
+                            <div className="pt-2 flex items-center justify-between gap-2">
+                              <a
+                                href={`tel:${rec.provider.contactPhone}`}
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 transition-colors"
+                              >
+                                Call {rec.provider.contactPhone}
+                              </a>
                               <Link
                                 href={`/repairers/${rec.provider.slug}`}
                                 onClick={() => setIsOpen(false)}

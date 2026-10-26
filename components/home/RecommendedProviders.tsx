@@ -38,13 +38,13 @@ export function RecommendedProviders() {
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-xs font-semibold border border-emerald-200 dark:border-emerald-800 mb-2">
               <ShieldCheck className="h-3.5 w-3.5" />
-              <span>100% Real Records • No Fabricated Listings</span>
+              <span>Real Local Shops • Direct Phone Numbers</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Verified Providers in Antique
+              Verified Repair Shops in San Jose de Buenavista
             </h2>
             <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              Discovered and verified workshops with genuine customer reviews and confirmed locations.
+              Browse genuine repair shops and technicians in Antique. Call directly or request a free quote.
             </p>
           </div>
 

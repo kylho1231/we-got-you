@@ -25,10 +25,9 @@ export function Navbar() {
   const pathname = usePathname();
 
   const navLinks = [
-    { label: "Find Services", href: "/services" },
-    { label: "Repairers", href: "/find-repairers" },
+    { label: "Find Repairers", href: "/find-repairers" },
+    { label: "Roadside Rescue", href: "/roadside-assistance", isEmergency: true },
     { label: "Live Map", href: "/map" },
-    { label: "Roadside Help", href: "/roadside-assistance", isEmergency: true },
     { label: "How It Works", href: "/how-it-works" },
   ];
 

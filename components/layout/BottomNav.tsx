@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, ShieldAlert, MessageSquare, User } from "lucide-react";
+import { Home, Search, ShieldAlert, MapPin, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function BottomNav() {
@@ -11,14 +11,14 @@ export function BottomNav() {
 
   const tabs = [
     { label: "Home", href: "/", icon: Home },
-    { label: "Search", href: "/find-repairers", icon: Search },
+    { label: "Shops", href: "/find-repairers", icon: Search },
     {
       label: "Rescue",
       href: "/roadside-assistance",
       icon: ShieldAlert,
       isEmergency: true,
     },
-    { label: "Messages", href: "/dashboard/messages", icon: MessageSquare },
+    { label: "Live Map", href: "/map", icon: MapPin },
     { label: "Account", href: "/dashboard", icon: User },
   ];
 

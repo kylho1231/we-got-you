@@ -29,6 +29,12 @@ export class DataStore {
   private static instance: DataStore;
   private isBrowser: boolean;
 
+  // Server-side in-memory fallbacks when window/localStorage is unavailable
+  private serverProviders: Provider[] = [...INITIAL_PROVIDERS];
+  private serverRequests: ServiceRequest[] = [];
+  private serverRoadside: RoadsideRequest[] = [];
+  private serverReviews: Review[] = [...INITIAL_REVIEWS];
+
   private constructor() {
     this.isBrowser = typeof window !== "undefined";
     this.initializeDefaults();
@@ -85,12 +91,12 @@ export class DataStore {
 
   // --- PROVIDERS ---
   public getProviders(): Provider[] {
-    if (!this.isBrowser) return INITIAL_PROVIDERS;
+    if (!this.isBrowser) return this.serverProviders;
     try {
       const data = localStorage.getItem(STORAGE_KEY_PROVIDERS);
       return data ? JSON.parse(data) : INITIAL_PROVIDERS;
     } catch {
-      return INITIAL_PROVIDERS;
+      return this.serverProviders;
     }
   }
 
@@ -103,7 +109,10 @@ export class DataStore {
   }
 
   public saveProviders(providers: Provider[]): void {
-    if (!this.isBrowser) return;
+    if (!this.isBrowser) {
+      this.serverProviders = providers;
+      return;
+    }
     localStorage.setItem(STORAGE_KEY_PROVIDERS, JSON.stringify(providers));
   }
 
@@ -133,17 +142,20 @@ export class DataStore {
 
   // --- SERVICE REQUESTS & BOOKINGS ---
   public getServiceRequests(): ServiceRequest[] {
-    if (!this.isBrowser) return [];
+    if (!this.isBrowser) return this.serverRequests;
     try {
       const data = localStorage.getItem(STORAGE_KEY_REQUESTS);
       return data ? JSON.parse(data) : [];
     } catch {
-      return [];
+      return this.serverRequests;
     }
   }
 
   public saveServiceRequests(requests: ServiceRequest[]): void {
-    if (!this.isBrowser) return;
+    if (!this.isBrowser) {
+      this.serverRequests = requests;
+      return;
+    }
     localStorage.setItem(STORAGE_KEY_REQUESTS, JSON.stringify(requests));
   }
 
@@ -249,17 +261,20 @@ export class DataStore {
 
   // --- ROADSIDE ASSISTANCE & DISPATCH ---
   public getRoadsideRequests(): RoadsideRequest[] {
-    if (!this.isBrowser) return [];
+    if (!this.isBrowser) return this.serverRoadside;
     try {
       const data = localStorage.getItem(STORAGE_KEY_ROADSIDE);
       return data ? JSON.parse(data) : [];
     } catch {
-      return [];
+      return this.serverRoadside;
     }
   }
 
   public saveRoadsideRequests(requests: RoadsideRequest[]): void {
-    if (!this.isBrowser) return;
+    if (!this.isBrowser) {
+      this.serverRoadside = requests;
+      return;
+    }
     localStorage.setItem(STORAGE_KEY_ROADSIDE, JSON.stringify(requests));
   }
 

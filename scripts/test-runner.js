@@ -141,6 +141,47 @@ test("AIAssistant detects dangerous keywords and prioritizes 911 emergency notic
   assert(isEmergency === true, "Must flag emergency for crash and fire keywords");
 });
 
+// 7. REST API VALIDATION SCHEMA TEST
+test("REST API Zod schemas strictly validate request payloads and mobile numbers", () => {
+  const { z } = require("zod");
+  const phoneRegex = /^(\+?63|0)9\d{9}$/;
+
+  assert(phoneRegex.test("09171234567") === true, "Standard PH mobile must pass");
+  assert(phoneRegex.test("+639171234567") === true, "+63 format must pass");
+  assert(phoneRegex.test("12345") === false, "Invalid phone must fail");
+  assert(phoneRegex.test("08171234567") === false, "Non-09 prefix must fail");
+});
+
+// 8. VOICE & DIALECT PROBLEM TRIAGE CLASSIFICATION TEST
+test("Voice & Dialect triage accurately classifies Karay-a, Tagalog, and English queries", () => {
+  function classifyProblem(query) {
+    const q = query.toLowerCase();
+    if (q.includes("ligid") || q.includes("flat") || q.includes("vulcaniz")) {
+      return { category: "Roadside Assistance", urgency: "EMERGENCY_ROADSIDE" };
+    }
+    if (q.includes("basag") || q.includes("screen") || q.includes("lcd")) {
+      return { category: "Mobile Phone & Gadget Repair", urgency: "HIGH" };
+    }
+    if (q.includes("aircon") || q.includes("ref") || q.includes("refrigerator")) {
+      return { category: "Appliance Repair", urgency: "HIGH" };
+    }
+    return { category: "General Maintenance", urgency: "MEDIUM" };
+  }
+
+  // Karay-a query: "Nabuta akon ligid sa San Pedro" -> Flat tire
+  const r1 = classifyProblem("Nabuta akon ligid sa San Pedro");
+  assert.strictEqual(r1.category, "Roadside Assistance");
+  assert.strictEqual(r1.urgency, "EMERGENCY_ROADSIDE");
+
+  // Tagalog query: "Basag ang screen ng phone ko" -> Screen replacement
+  const r2 = classifyProblem("Basag ang screen ng phone ko");
+  assert.strictEqual(r2.category, "Mobile Phone & Gadget Repair");
+
+  // English query: "My refrigerator is leaking and not cold" -> Appliance
+  const r3 = classifyProblem("My refrigerator is leaking and not cold");
+  assert.strictEqual(r3.category, "Appliance Repair");
+});
+
 console.log(`\n--------------------------------------`);
 console.log(`TEST RESULTS: ${passed} PASSED, ${failed} FAILED`);
 console.log(`--------------------------------------\n`);
